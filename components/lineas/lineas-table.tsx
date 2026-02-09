@@ -233,35 +233,31 @@ export function LineasTable() {
             <TableHeader>
               <TableRow>
                 {/* 1. id_linea */}
-                <TableHead className="w-[100px]">ID Línea</TableHead>
+                <TableHead className="w-25">ID Línea</TableHead>
 
                 {/* 2. desc_linea */}
                 <TableHead>Descripción Línea</TableHead>
 
                 {/* 3. code_trayecto */}
-                <TableHead className="w-[120px]">Código Trayecto</TableHead>
+                <TableHead className="w-30">Código Trayecto</TableHead>
 
                 {/* 4. desc_trayecto */}
                 <TableHead>Descripción Trayecto</TableHead>
 
                 {/* 5. desc_trayecto_corta */}
-                <TableHead className="w-[150px]">
-                  Desc. Trayecto Corta
-                </TableHead>
+                <TableHead className="w-37.5">Desc. Trayecto Corta</TableHead>
 
                 {/* 6. tipo_viaje */}
-                <TableHead className="w-[120px]">Tipo Viaje</TableHead>
+                <TableHead className="w-30">Tipo Viaje</TableHead>
 
                 {/* 7. color */}
-                <TableHead className="w-[120px]">Color</TableHead>
+                <TableHead className="w-30">Color</TableHead>
 
                 {/* 8. code_trayecto_externo */}
-                <TableHead className="w-[150px]">
-                  Code Trayecto Externo
-                </TableHead>
+                <TableHead className="w-37.5">Code Trayecto Externo</TableHead>
 
                 {/* Acciones */}
-                <TableHead className="w-[50px]"></TableHead>
+                <TableHead className="w-12.5"></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -286,7 +282,7 @@ export function LineasTable() {
 
                     {/* 2. desc_linea */}
                     <TableCell
-                      className="max-w-[200px] truncate"
+                      className="max-w-50 truncate"
                       title={linea.desc_linea}
                     >
                       {linea.desc_linea}
@@ -299,7 +295,7 @@ export function LineasTable() {
 
                     {/* 4. desc_trayecto */}
                     <TableCell
-                      className="max-w-[250px] truncate"
+                      className="max-w-62.5 truncate"
                       title={linea.desc_trayecto}
                     >
                       {linea.desc_trayecto}
@@ -392,7 +388,7 @@ export function LineasTable() {
                 setCurrentPage(1);
               }}
             >
-              <SelectTrigger className="w-[70px]">
+              <SelectTrigger className="w-17.5">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>

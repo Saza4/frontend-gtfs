@@ -238,10 +238,10 @@ export function DatosArcoTable() {
             <TableHeader>
               <TableRow>
                 {/* 1. id_datos_arco */}
-                <TableHead className="w-[80px]">ID</TableHead>
+                <TableHead className="w-20">ID</TableHead>
 
                 {/* 2. id_arco */}
-                <TableHead className="w-[100px]">Arco</TableHead>
+                <TableHead className="w-25">Arco</TableHead>
 
                 {/* 3. desc_arco */}
                 <TableHead>Descripción</TableHead>
@@ -253,23 +253,19 @@ export function DatosArcoTable() {
                 <TableHead>Destino</TableHead>
 
                 {/* 6. fecha_validez */}
-                <TableHead className="w-[110px]">Fecha Validez</TableHead>
+                <TableHead className="w-27.5">Fecha Validez</TableHead>
 
                 {/* 7. metros_teoricos */}
-                <TableHead className="w-[110px] text-right">
-                  M. Teóricos
-                </TableHead>
+                <TableHead className="w-27.5 text-right">M. Teóricos</TableHead>
 
                 {/* 8. metros_mapa */}
-                <TableHead className="w-[110px] text-right">M. Mapa</TableHead>
+                <TableHead className="w-27.5 text-right">M. Mapa</TableHead>
 
                 {/* Diferencia */}
-                <TableHead className="w-[120px] text-center">
-                  Diferencia
-                </TableHead>
+                <TableHead className="w-30 text-center">Diferencia</TableHead>
 
                 {/* Acciones */}
-                <TableHead className="w-[50px]"></TableHead>
+                <TableHead className="w-12.5"></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -305,7 +301,7 @@ export function DatosArcoTable() {
 
                       {/* 3. desc_arco */}
                       <TableCell
-                        className="max-w-[200px] truncate font-mono text-sm"
+                        className="max-w-50 truncate font-mono text-sm"
                         title={dato.desc_arco}
                       >
                         {dato.desc_arco}
@@ -313,7 +309,7 @@ export function DatosArcoTable() {
 
                       {/* 4. origen */}
                       <TableCell
-                        className="max-w-[200px] truncate"
+                        className="max-w-50 truncate"
                         title={dato.origen}
                       >
                         {dato.origen}
@@ -321,7 +317,7 @@ export function DatosArcoTable() {
 
                       {/* 5. destino */}
                       <TableCell
-                        className="max-w-[200px] truncate"
+                        className="max-w-50 truncate"
                         title={dato.destino}
                       >
                         <div className="flex items-center gap-1">
@@ -418,7 +414,7 @@ export function DatosArcoTable() {
                 setCurrentPage(1);
               }}
             >
-              <SelectTrigger className="w-[70px]">
+              <SelectTrigger className="w-17.5">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
