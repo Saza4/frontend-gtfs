@@ -74,7 +74,7 @@ export function CreateParadaDialog({
           Nueva parada
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent className="max-width: 600px">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>Crear nueva parada</DialogTitle>
