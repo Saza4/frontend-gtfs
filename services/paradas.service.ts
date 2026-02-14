@@ -23,7 +23,7 @@ export const paradasService = {
 
   /**
    * GET /api/paradas/:id
-   * Obtener una parada por ID
+   * Obtener una parada por ID (versión más reciente)
    */
   getById: async (id: number): Promise<Parada> => {
     const response = await api.get<Parada>(`/paradas/${id}`);
@@ -40,20 +40,31 @@ export const paradasService = {
   },
 
   /**
-   * PATCH /api/paradas/:id
-   * Actualizar una parada existente
+   * PATCH /api/paradas/:id/:fecha
+   * Actualizar una parada usando clave compuesta
+   * ARREGLADO: Ahora envía id + fecha
    */
-  update: async (id: number, data: ParadaUpdate): Promise<Parada> => {
-    const response = await api.patch<Parada>(`/paradas/${id}`, data);
+  update: async (
+    id: number,
+    fecha: string,
+    data: ParadaUpdate,
+  ): Promise<{ message: string; parada: Parada }> => {
+    const response = await api.patch<{ message: string; parada: Parada }>(
+      `/paradas/${id}/${fecha}`,
+      data,
+    );
     return response.data;
   },
 
   /**
-   * DELETE /api/paradas/:id
-   * Eliminar una parada
+   * DELETE /api/paradas/:id/:fecha
+   * Eliminar una parada usando clave compuesta
+   * ARREGLADO: Ahora envía id + fecha
    */
-  delete: async (id: number): Promise<{ message: string }> => {
-    const response = await api.delete<{ message: string }>(`/paradas/${id}`);
+  delete: async (id: number, fecha: string): Promise<{ message: string }> => {
+    const response = await api.delete<{ message: string }>(
+      `/paradas/${id}/${fecha}`,
+    );
     return response.data;
   },
 

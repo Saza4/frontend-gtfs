@@ -62,8 +62,11 @@ export function ParadasTable() {
   const [editParada, setEditParada] = useState<Parada | null>(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
 
-  // Estado para Alert Dialog de eliminación
-  const [deleteParadaId, setDeleteParadaId] = useState<number | null>(null);
+  // ARREGLADO: Estado para Alert Dialog ahora guarda id + fecha
+  const [deleteParada, setDeleteParada] = useState<{
+    id: number;
+    fecha: string;
+  } | null>(null);
   const [deleteAlertOpen, setDeleteAlertOpen] = useState(false);
 
   // Cargar datos al montar
@@ -123,22 +126,60 @@ export function ParadasTable() {
   };
 
   /**
-   * Abrir Alert Dialog para confirmar eliminación
+   * NUEVO: Callback cuando se actualiza una parada
+   * NO recarga todo, solo actualiza el registro específico
    */
-  const handleDeleteClick = (id: number) => {
-    setDeleteParadaId(id);
+  const handleParadaUpdated = (paradaActualizada: Parada) => {
+    setParadas((prevParadas) =>
+      prevParadas.map((p) =>
+        p.id_parada === paradaActualizada.id_parada &&
+        p.fecha_validez === paradaActualizada.fecha_validez
+          ? paradaActualizada
+          : p,
+      ),
+    );
+    toast.success("Parada actualizada en la tabla");
+  };
+
+  /**
+   * NUEVO: Callback cuando se crea una parada
+   * Agrega al estado local en lugar de recargar todo
+   */
+  const handleParadaCreated = (nuevaParada: Parada) => {
+    setParadas((prevParadas) => [nuevaParada, ...prevParadas]);
+    toast.success("Parada agregada a la tabla");
+  };
+
+  /**
+   * ARREGLADO: Abrir Alert Dialog con id + fecha
+   */
+  const handleDeleteClick = (id: number, fecha: string) => {
+    setDeleteParada({ id, fecha });
     setDeleteAlertOpen(true);
   };
 
   /**
-   * Confirmar eliminación de parada
+   * ARREGLADO: Confirmar eliminación con clave compuesta
+   * NO recarga todo, solo elimina del estado local
    */
   const confirmDelete = async () => {
-    if (deleteParadaId === null) return;
+    if (!deleteParada) return;
 
     try {
-      await paradasService.delete(deleteParadaId);
-      setParadas(paradas.filter((p) => p.id_parada !== deleteParadaId));
+      // Envía id + fecha
+      await paradasService.delete(deleteParada.id, deleteParada.fecha);
+
+      // Solo elimina del estado local (sin recarga)
+      setParadas((prevParadas) =>
+        prevParadas.filter(
+          (p) =>
+            !(
+              p.id_parada === deleteParada.id &&
+              p.fecha_validez === deleteParada.fecha
+            ),
+        ),
+      );
+
       toast.success("Parada eliminada exitosamente");
     } catch (error) {
       if (error instanceof ApiError) {
@@ -148,7 +189,7 @@ export function ParadasTable() {
       }
     } finally {
       setDeleteAlertOpen(false);
-      setDeleteParadaId(null);
+      setDeleteParada(null);
     }
   };
 
@@ -189,7 +230,7 @@ export function ParadasTable() {
                 value={searchQuery}
                 onChange={(e) => {
                   setSearchQuery(e.target.value);
-                  setCurrentPage(1); // Reset a página 1
+                  setCurrentPage(1);
                 }}
                 className="pl-10"
               />
@@ -206,8 +247,8 @@ export function ParadasTable() {
             </Button>
           </div>
 
-          {/* Botón Crear */}
-          <CreateParadaDialog onParadaCreated={loadParadas} />
+          {/*  ARREGLADO: Botón Crear usa handleParadaCreated */}
+          <CreateParadaDialog onParadaCreated={handleParadaCreated} />
         </div>
 
         {/* TABLA */}
@@ -256,9 +297,13 @@ export function ParadasTable() {
                     </TableCell>
                     <TableCell>
                       <Badge variant="secondary">
-                        {new Date(parada.fecha_validez).toLocaleDateString(
-                          "es-MX",
-                        )}
+                        {new Date(
+                          parada.fecha_validez + "T00:00:00",
+                        ).toLocaleDateString("es-MX", {
+                          year: "numeric",
+                          month: "2-digit",
+                          day: "2-digit",
+                        })}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right font-mono text-sm">
@@ -293,7 +338,12 @@ export function ParadasTable() {
                           </DropdownMenuItem>
                           <DropdownMenuSeparator />
                           <DropdownMenuItem
-                            onClick={() => handleDeleteClick(parada.id_parada)}
+                            onClick={() =>
+                              handleDeleteClick(
+                                parada.id_parada,
+                                parada.fecha_validez,
+                              )
+                            }
                             className="text-destructive focus:text-destructive"
                           >
                             <Trash2 className="mr-2 h-4 w-4" />
@@ -388,12 +438,12 @@ export function ParadasTable() {
         </div>
       </div>
 
-      {/* MODAL DE EDICIÓN */}
+      {/*  ARREGLADO: MODAL DE EDICIÓN usa handleParadaUpdated */}
       <EditParadaDialog
         parada={editParada}
         open={editDialogOpen}
         onOpenChange={setEditDialogOpen}
-        onParadaUpdated={loadParadas}
+        onParadaUpdated={handleParadaUpdated}
       />
 
       {/* ALERT DIALOG DE ELIMINACIÓN */}

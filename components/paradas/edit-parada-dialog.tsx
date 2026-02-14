@@ -21,7 +21,7 @@ interface EditParadaDialogProps {
   parada: Parada | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onParadaUpdated: () => void;
+  onParadaUpdated: (paradaActualizada: Parada) => void; //  Ahora devuelve la parada actualizada
 }
 
 export function EditParadaDialog({
@@ -54,10 +54,19 @@ export function EditParadaDialog({
     setLoading(true);
 
     try {
-      await paradasService.update(parada.id_parada, formData);
-      toast.success("Parada actualizada exitosamente");
+      //  ARREGLADO: Envía id + fecha
+      const response = await paradasService.update(
+        parada.id_parada,
+        parada.fecha_validez,
+        formData,
+      );
+
+      toast.success(response.message || "Parada actualizada exitosamente");
+
+      //  Pasa la parada actualizada al componente padre
+      onParadaUpdated(response.parada);
+
       onOpenChange(false);
-      onParadaUpdated(); // Recargar tabla
     } catch (error) {
       if (error instanceof ApiError) {
         toast.error(error.message);
@@ -73,7 +82,7 @@ export function EditParadaDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent className="sm:max-w-600px">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>Editar parada P-{parada.id_parada}</DialogTitle>

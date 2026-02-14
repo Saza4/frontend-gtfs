@@ -2,7 +2,7 @@
 @import "tw-animate-css";
 
 /* ============================================
-   TEMA ATY - SISTEMA DE DISEÑO OFICIAL
+   TEMA ATY - SISTEMA DE DISEÃ‘O OFICIAL
    Basado en Manual de Identidad ATY
    ============================================ */
 
@@ -27,9 +27,9 @@
   --color-secondary: #f2f2f2;
   --color-secondary-foreground: #273147;
   --color-muted: #f2f2f2;
-  --color-muted-foreground: #5e6d75;
-  --color-accent: #03603a;
-  --color-accent-foreground: #ffffff;
+  --color-muted-foreground: #000000;
+  --color-accent: #4d4d4d66; /* ~40% */
+  --color-accent-foreground: #000000;
   --color-destructive: #ef4444;
   --color-destructive-foreground: #ffffff;
   --color-border: #bfc8c8;
@@ -70,7 +70,7 @@
   --color-muted: #1a1a1a;
   /*Texto y texto de la barra de busqueda*/
   --color-muted-foreground: #ffffff;
-  /*Hover del menu hamburguesa para móviles*/
+  /*Hover del menu hamburguesa para mÃ³viles*/
   --color-accent: #1a1a1a;
   /*Hover del menu y del modo oscuro*/
   --color-accent-foreground: #ffffff;
@@ -80,7 +80,7 @@
   --color-destructive-foreground: #ffffff;
   /*Linia divisora en el mini modal: Editar, ver en mapa y eliminar*/
   --color-border: #262626;
-  /*input de la barra de busqueda, el boton de recargar datos y el pie de pagina con la paginación*/
+  /*input de la barra de busqueda, el boton de recargar datos y el pie de pagina con la paginaciÃ³n*/
   --color-input: #262626;
   /*boton para cerrar en el menu hamburguesa*/
   --color-ring: #59af31;

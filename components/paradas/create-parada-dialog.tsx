@@ -17,10 +17,10 @@ import { Plus } from "lucide-react";
 import { toast } from "sonner";
 import { paradasService } from "@/services/paradas.service";
 import { ApiError } from "@/lib/api";
-import type { ParadaCreate } from "@/types/index-paradas";
+import type { Parada, ParadaCreate } from "@/types/index-paradas";
 
 interface CreateParadaDialogProps {
-  onParadaCreated: () => void;
+  onParadaCreated: (parada: Parada) => void; // ✅ Ahora devuelve la parada creada
 }
 
 export function CreateParadaDialog({
@@ -32,7 +32,7 @@ export function CreateParadaDialog({
     id_parada: 0,
     desc_parada: "",
     desc_parada_corta: "",
-    fecha_validez: new Date().toISOString().split("T")[0], // Fecha actual
+    fecha_validez: new Date().toISOString().split("T")[0],
     latitud: 0,
     longitud: 0,
   });
@@ -42,10 +42,14 @@ export function CreateParadaDialog({
     setLoading(true);
 
     try {
-      await paradasService.create(formData);
+      const nuevaParada = await paradasService.create(formData);
+
       toast.success("Parada creada exitosamente");
       setOpen(false);
-      onParadaCreated(); // Recargar tabla
+
+      // ✅ Devuelve la parada creada al componente padre
+      onParadaCreated(nuevaParada);
+
       // Reset form
       setFormData({
         id_parada: 0,
@@ -74,7 +78,7 @@ export function CreateParadaDialog({
           Nueva parada
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-width: 600px">
+      <DialogContent className="sm:max-w-[600px]">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>Crear nueva parada</DialogTitle>

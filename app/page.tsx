@@ -30,16 +30,16 @@ export default function HomePage() {
     },
     {
       icon: Route,
-      title: "Líneas",
-      description: "Administra las 192 líneas de transporte",
+      title: "Lí­neas",
+      description: "Administra las 192 lí­neas de transporte",
       href: "/lineas",
       color: "text-[#03603a]",
       bgColor: "bg-[#03603a]/10",
     },
     {
       icon: Warehouse,
-      title: "Depósito",
-      description: "10 depósitos y terminales",
+      title: "Depésito",
+      description: "10 depésitos y terminales",
       href: "/deposito",
       color: "text-[#273147]",
       bgColor: "bg-[#273147]/10",
@@ -62,8 +62,8 @@ export default function HomePage() {
     },
     {
       icon: GitBranch,
-      title: "Arcos Línea",
-      description: "Geometría de rutas",
+      title: "Arcos Lí­nea",
+      description: "Geometrí­a de rutas",
       href: "/arcos-linea",
       color: "text-[#273147]",
       bgColor: "bg-[#273147]/10",
@@ -110,7 +110,7 @@ export default function HomePage() {
 
               <p className="text-lg md:text-xl text-white/80 max-w-2xl">
                 Sistema integral de gestión de datos GTFS para el transporte
-                público de Mérida, Yucatán. Administra paradas, líneas, rutas y
+                público de Mérida, Yucatán. Administra paradas, lí­neas, rutas y
                 más.
               </p>
 
@@ -120,7 +120,7 @@ export default function HomePage() {
                   size="lg"
                   className="bg-white text-[#59af31] hover:bg-white/90"
                 >
-                  <Link href="/paradas">Comenzar →</Link>
+                  <Link href="/paradas">Comenzar â†’</Link>
                 </Button>
                 <Button
                   asChild
