@@ -46,6 +46,8 @@ export function CreateDatosArcoDialog({
       toast.success("Dato de arco creado exitosamente");
       setOpen(false);
       onDatoCreated();
+
+      // Reset form
       setFormData({
         id_arco: 0,
         desc_arco: "",
@@ -79,7 +81,9 @@ export function CreateDatosArcoDialog({
               Ingrese los detalles del segmento de ruta.
             </DialogDescription>
           </DialogHeader>
+
           <div className="grid gap-4 py-4">
+            {/* ID Arco */}
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="id_arco" className="text-right">
                 ID Arco *
@@ -91,13 +95,15 @@ export function CreateDatosArcoDialog({
                 onChange={(e) =>
                   setFormData({
                     ...formData,
-                    id_arco: parseInt(e.target.value),
+                    id_arco: parseInt(e.target.value) || 0,
                   })
                 }
                 className="col-span-3"
                 required
               />
             </div>
+
+            {/* Descripción */}
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="desc_arco" className="text-right">
                 Descripción *
@@ -113,45 +119,99 @@ export function CreateDatosArcoDialog({
                 required
               />
             </div>
+
+            {/* Origen */}
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="metros_teoricos" className="text-right">
-                M. Teóricos *
+              <Label htmlFor="origen" className="text-right">
+                Origen *
               </Label>
               <Input
-                id="metros_teoricos"
-                type="number"
-                step="0.01"
-                value={formData.metros_teoricos}
+                id="origen"
+                value={formData.origen}
                 onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    metros_teoricos: parseFloat(e.target.value),
-                  })
+                  setFormData({ ...formData, origen: e.target.value })
+                }
+                className="col-span-3"
+                maxLength={500}
+                required
+              />
+            </div>
+
+            {/* Destino */}
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="destino" className="text-right">
+                Destino *
+              </Label>
+              <Input
+                id="destino"
+                value={formData.destino}
+                onChange={(e) =>
+                  setFormData({ ...formData, destino: e.target.value })
+                }
+                className="col-span-3"
+                maxLength={500}
+                required
+              />
+            </div>
+
+            {/* Fecha de Validez */}
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="fecha_validez" className="text-right">
+                Fecha Validez *
+              </Label>
+              <Input
+                id="fecha_validez"
+                type="date"
+                value={formData.fecha_validez}
+                onChange={(e) =>
+                  setFormData({ ...formData, fecha_validez: e.target.value })
                 }
                 className="col-span-3"
                 required
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="metros_mapa" className="text-right">
-                M. Mapa *
-              </Label>
-              <Input
-                id="metros_mapa"
-                type="number"
-                step="0.01"
-                value={formData.metros_mapa}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    metros_mapa: parseFloat(e.target.value),
-                  })
-                }
-                className="col-span-3"
-                required
-              />
+
+            {/* Metros Teóricos y Mapa en 2 columnas */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="metros_teoricos">Metros Teóricos *</Label>
+                <Input
+                  id="metros_teoricos"
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={formData.metros_teoricos}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      metros_teoricos: parseFloat(e.target.value) || 0,
+                    })
+                  }
+                  placeholder="370"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="metros_mapa">Metros Mapa *</Label>
+                <Input
+                  id="metros_mapa"
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={formData.metros_mapa}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      metros_mapa: parseFloat(e.target.value) || 0,
+                    })
+                  }
+                  placeholder="370"
+                  required
+                />
+              </div>
             </div>
           </div>
+
           <DialogFooter>
             <Button
               type="button"

@@ -26,7 +26,7 @@ export default function ArcosLineaPage() {
         <p className="text-muted-foreground mt-2">
           Gestiona los segmentos de trayecto.{" "}
           {totalCount !== null && (
-            <span className="text-sm font-medium text-slate-700">
+            <span className="text-sm">
               Registros totales: {totalCount.toLocaleString("es-MX")}
             </span>
           )}
