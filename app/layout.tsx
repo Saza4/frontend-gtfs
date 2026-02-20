@@ -6,9 +6,10 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { Toaster } from "sonner";
 import Image from "next/image";
 import Link from "next/link";
-import { Menu } from "lucide-react";
+import { Menu, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { ExportGtfsButton } from "@/components/gtfs-export/export-gtfs-button";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,7 +30,7 @@ export default function RootLayout({
     { href: "/deposito", label: "Depósito" },
     { href: "/puntos-carga", label: "Puntos de Carga" },
     { href: "/datos-arco", label: "Datos Arco" },
-    { href: "/arcos-linea", label: "Arcos Lí­nea" },
+    { href: "/arcos-linea", label: "Arcos Línea" },
     { href: "/paradas-regularizacion", label: "Regularización" },
   ];
 
@@ -81,6 +82,11 @@ export default function RootLayout({
 
               {/* ACCIONES */}
               <div className="flex items-center space-x-2">
+                {/* ✅ Botón de exportación en el header (solo desktop) */}
+                <div className="hidden xl:block">
+                  <ExportGtfsButton variant="outline" size="sm" />
+                </div>
+
                 <ThemeToggle />
 
                 {/* MENÚ MÓVIL */}
@@ -91,7 +97,7 @@ export default function RootLayout({
                       <span className="sr-only">Abrir menú</span>
                     </Button>
                   </SheetTrigger>
-                  <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+                  <SheetContent side="right" className="w-300px sm:w-400px">
                     <div className="flex flex-col space-y-4 mt-8">
                       <div className="flex items-center space-x-3 pb-4 border-b">
                         <div className="relative h-12 w-12">
@@ -108,6 +114,14 @@ export default function RootLayout({
                             Generador GTFS
                           </span>
                         </div>
+                      </div>
+
+                      {/* ✅ Botón de exportación en el menú móvil */}
+                      <div className="pb-4 border-b">
+                        <ExportGtfsButton
+                          variant="default"
+                          className="w-full"
+                        />
                       </div>
 
                       <nav className="flex flex-col space-y-2">
@@ -147,7 +161,6 @@ export default function RootLayout({
                   <p className="font-medium">
                     Agencia de Transporte de Yucatán
                   </p>
-                  <p className="text-xs">Sistema GTFS Â© 2025</p>
                 </div>
               </div>
 

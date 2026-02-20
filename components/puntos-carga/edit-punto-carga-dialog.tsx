@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { puntosCargaService } from "@/services/puntos-carga.service";
 import { ApiError } from "@/lib/api";
@@ -21,14 +22,14 @@ interface EditPuntoCargaDialogProps {
   punto: PuntoCarga | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onPuntoUpdated: () => void;
+  onPuntoActualizado: () => void;
 }
 
 export function EditPuntoCargaDialog({
   punto,
   open,
   onOpenChange,
-  onPuntoUpdated,
+  onPuntoActualizado,
 }: EditPuntoCargaDialogProps) {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<PuntoCargaUpdate>({});
@@ -37,7 +38,6 @@ export function EditPuntoCargaDialog({
   useEffect(() => {
     if (punto) {
       setFormData({
-        id_punto_recarga: punto.id_punto_recarga,
         desc_sitio: punto.desc_sitio,
         desc_sitio_corta: punto.desc_sitio_corta,
         desc_bus: punto.desc_bus,
@@ -63,7 +63,7 @@ export function EditPuntoCargaDialog({
       await puntosCargaService.update(punto.id_registro, formData);
       toast.success("Punto de carga actualizado exitosamente");
       onOpenChange(false);
-      onPuntoUpdated();
+      onPuntoActualizado();
     } catch (error) {
       if (error instanceof ApiError) {
         toast.error(error.message);
@@ -82,36 +82,17 @@ export function EditPuntoCargaDialog({
       <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>
-              Editar punto de carga #{punto.id_registro}
+            <DialogTitle className="flex items-center gap-2 flex-wrap">
+              Editar punto de carga
+              <Badge variant="secondary">Reg: {punto.id_registro}</Badge>
+              <Badge variant="outline">Punto: {punto.id_punto_recarga}</Badge>
             </DialogTitle>
             <DialogDescription>
-              Modifica los datos del punto de carga. Los cambios se guardarán al
-              hacer clic en `Guardar cambios`.
+              Modifica los datos del punto de carga.
             </DialogDescription>
           </DialogHeader>
 
           <div className="grid gap-4 py-4">
-            {/* ID Punto de Recarga */}
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="id_punto_recarga" className="text-right">
-                ID Punto *
-              </Label>
-              <Input
-                id="id_punto_recarga"
-                type="number"
-                value={formData.id_punto_recarga || 0}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    id_punto_recarga: parseInt(e.target.value) || 0,
-                  })
-                }
-                className="col-span-3"
-                required
-              />
-            </div>
-
             {/* Descripción del Sitio */}
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="desc_sitio" className="text-right">
@@ -231,85 +212,75 @@ export function EditPuntoCargaDialog({
               />
             </div>
 
-            {/* Costos */}
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="costo_real" className="text-right">
-                Costo Real
-              </Label>
-              <Input
-                id="costo_real"
-                type="number"
-                min="0"
-                step="0.000001"
-                value={formData.costo_real || 0}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    costo_real: parseFloat(e.target.value) || 0,
-                  })
-                }
-                className="col-span-3"
-              />
+            {/* Costos en 2 columnas */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="costo_real">Costo Real</Label>
+                <Input
+                  id="costo_real"
+                  type="number"
+                  min="0"
+                  step="0.000001"
+                  value={formData.costo_real || 0}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      costo_real: parseFloat(e.target.value) || 0,
+                    })
+                  }
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="funcion_objetivo">Función Objetivo</Label>
+                <Input
+                  id="funcion_objetivo"
+                  type="number"
+                  min="0"
+                  step="0.000001"
+                  value={formData.funcion_objetivo || 0}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      funcion_objetivo: parseFloat(e.target.value) || 0,
+                    })
+                  }
+                />
+              </div>
             </div>
 
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="funcion_objetivo" className="text-right">
-                Función Objetivo
-              </Label>
-              <Input
-                id="funcion_objetivo"
-                type="number"
-                min="0"
-                step="0.000001"
-                value={formData.funcion_objetivo || 0}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    funcion_objetivo: parseFloat(e.target.value) || 0,
-                  })
-                }
-                className="col-span-3"
-              />
-            </div>
-
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="costo_real_kwh" className="text-right">
-                Costo Real (kWh)
-              </Label>
-              <Input
-                id="costo_real_kwh"
-                type="number"
-                min="0"
-                step="0.000001"
-                value={formData.costo_real_kwh || 0}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    costo_real_kwh: parseFloat(e.target.value) || 0,
-                  })
-                }
-                className="col-span-3"
-              />
-            </div>
-
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="funcion_objetivo_kwh" className="text-right">
-                Función Obj. (kWh)
-              </Label>
-              <Input
-                id="funcion_objetivo_kwh"
-                type="number"
-                min="0"
-                step="0.000001"
-                value={formData.funcion_objetivo_kwh || 0}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    funcion_objetivo_kwh: parseFloat(e.target.value) || 0,
-                  })
-                }
-                className="col-span-3"
-              />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="costo_real_kwh">Costo Real (kWh)</Label>
+                <Input
+                  id="costo_real_kwh"
+                  type="number"
+                  min="0"
+                  step="0.000001"
+                  value={formData.costo_real_kwh || 0}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      costo_real_kwh: parseFloat(e.target.value) || 0,
+                    })
+                  }
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="funcion_objetivo_kwh">Función Obj. (kWh)</Label>
+                <Input
+                  id="funcion_objetivo_kwh"
+                  type="number"
+                  min="0"
+                  step="0.000001"
+                  value={formData.funcion_objetivo_kwh || 0}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      funcion_objetivo_kwh: parseFloat(e.target.value) || 0,
+                    })
+                  }
+                />
+              </div>
             </div>
           </div>
 

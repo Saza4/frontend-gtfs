@@ -98,26 +98,6 @@ export function CreatePuntoCargaDialog({
           </DialogHeader>
 
           <div className="grid gap-4 py-4">
-            {/* ID Punto de Recarga */}
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="id_punto_recarga" className="text-right">
-                ID Punto *
-              </Label>
-              <Input
-                id="id_punto_recarga"
-                type="number"
-                value={formData.id_punto_recarga}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    id_punto_recarga: parseInt(e.target.value) || 0,
-                  })
-                }
-                className="col-span-3"
-                required
-              />
-            </div>
-
             {/* Descripción del Sitio */}
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="desc_sitio" className="text-right">
@@ -131,7 +111,6 @@ export function CreatePuntoCargaDialog({
                 }
                 className="col-span-3"
                 maxLength={255}
-                placeholder="PR DEP PLAN"
                 required
               />
             </div>
@@ -152,7 +131,6 @@ export function CreatePuntoCargaDialog({
                 }
                 className="col-span-3"
                 maxLength={100}
-                placeholder="PR DEP PLAN"
                 required
               />
             </div>
@@ -170,7 +148,6 @@ export function CreatePuntoCargaDialog({
                 }
                 className="col-span-3"
                 maxLength={255}
-                placeholder="IETRAM"
                 required
               />
             </div>
@@ -188,7 +165,6 @@ export function CreatePuntoCargaDialog({
                 }
                 className="col-span-3"
                 maxLength={100}
-                placeholder="IETRAM"
                 required
               />
             </div>

@@ -88,26 +88,6 @@ export function CreateParadaDialog({
           </DialogHeader>
 
           <div className="grid gap-4 py-4">
-            {/* ID Parada */}
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="id_parada" className="text-right">
-                ID Parada *
-              </Label>
-              <Input
-                id="id_parada"
-                type="number"
-                value={formData.id_parada || ""}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    id_parada: Number(e.target.value),
-                  })
-                }
-                className="col-span-3"
-                required
-              />
-            </div>
-
             {/* Descripción */}
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="desc_parada" className="text-right">

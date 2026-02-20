@@ -83,26 +83,6 @@ export function CreateDatosArcoDialog({
           </DialogHeader>
 
           <div className="grid gap-4 py-4">
-            {/* ID Arco */}
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="id_arco" className="text-right">
-                ID Arco *
-              </Label>
-              <Input
-                id="id_arco"
-                type="number"
-                value={formData.id_arco}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    id_arco: parseInt(e.target.value) || 0,
-                  })
-                }
-                className="col-span-3"
-                required
-              />
-            </div>
-
             {/* Descripción */}
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="desc_arco" className="text-right">

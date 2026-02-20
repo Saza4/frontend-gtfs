@@ -7,13 +7,16 @@ import {
   Pencil,
   Trash2,
   RefreshCw,
-  ChevronLeft,
-  ChevronRight,
-  ChevronsLeft,
-  ChevronsRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -52,7 +55,7 @@ export function ParadasRegularizacionTable() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   const [selectedParada, setSelectedParada] =
     useState<ParadasRegularizacion | null>(null);
@@ -114,7 +117,11 @@ export function ParadasRegularizacionTable() {
     label: string;
   }) => (
     <span
-      className={`inline-flex items-center justify-center w-5 h-5 rounded text-[10px] font-bold ${active ? "bg-primary text-primary-foreground shadow-sm" : "bg-muted text-muted-foreground opacity-40"}`}
+      className={`inline-flex items-center justify-center w-5 h-5 rounded text-[10px] font-bold ${
+        active
+          ? "bg-primary text-primary-foreground shadow-sm"
+          : "bg-muted text-muted-foreground opacity-40"
+      }`}
       title={label}
     >
       {label[0]}
@@ -130,7 +137,7 @@ export function ParadasRegularizacionTable() {
           <div className="relative w-full max-w-sm">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
-              placeholder="Buscar por trayecto, parada..."
+              placeholder="Buscar por trayecto, parada, periodicidad..."
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
@@ -156,31 +163,31 @@ export function ParadasRegularizacionTable() {
         <CreateParadasRegularizacionDialog onSuccess={loadData} />
       </div>
 
-      <div className="rounded-md border shadow-sm overflow-x-auto">
+      {/* TABLA */}
+      <div className="rounded-md border">
         <Table>
-          <TableHeader className="bg-muted/50 text-xs uppercase tracking-wider">
+          <TableHeader>
             <TableRow>
-              <TableHead className="w-20">ID</TableHead>
-              <TableHead className="w-25">Trayecto</TableHead>
+              <TableHead className="w-25">ID</TableHead>
+              <TableHead>Trayecto</TableHead>
               <TableHead className="text-center w-20">Sentido</TableHead>
+              <TableHead>Fecha de validez</TableHead>
+              <TableHead>Periodicidad</TableHead>
               <TableHead>Descripción Parada</TableHead>
-              <TableHead className="w-37.5">
-                Funciones (R R E S D I R)
-              </TableHead>
-              <TableHead className="w-17.5 text-right"></TableHead>
+              <TableHead className="w-50">Funciones</TableHead>
+              <TableHead className="w-12.5"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {loading ? (
+            {paginatedData.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className="h-24 text-center italic">
-                  Cargando paradas...
-                </TableCell>
-              </TableRow>
-            ) : paginatedData.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={6} className="h-24 text-center italic">
-                  No hay resultados
+                <TableCell
+                  colSpan={8}
+                  className="text-center py-8 text-muted-foreground"
+                >
+                  {searchTerm
+                    ? "No se encontraron registros con los filtros aplicados"
+                    : "No hay paradas de regularización registradas"}
                 </TableCell>
               </TableRow>
             ) : (
@@ -189,12 +196,19 @@ export function ParadasRegularizacionTable() {
                   key={item.id_parada_regularizacion}
                   className="hover:bg-muted/30 transition-colors"
                 >
-                  <TableCell className="font-mono text-xs text-muted-foreground">
-                    {item.id_parada_regularizacion}
+                  {/* ID */}
+                  <TableCell className="font-medium">
+                    <Badge variant="outline">
+                      PR-{item.id_parada_regularizacion}
+                    </Badge>
                   </TableCell>
+
+                  {/* Trayecto */}
                   <TableCell className="font-bold">
                     {item.desc_trayecto_corta}
                   </TableCell>
+
+                  {/* Sentido */}
                   <TableCell className="text-center">
                     <Badge
                       variant={item.sentido === 0 ? "default" : "secondary"}
@@ -203,12 +217,36 @@ export function ParadasRegularizacionTable() {
                       {item.sentido === 0 ? "IDA" : "REG"}
                     </Badge>
                   </TableCell>
+
+                  {/* Fecha de Validez */}
+                  <TableCell>
+                    <Badge variant="secondary">
+                      {new Date(
+                        item.fecha_validez + "T00:00:00",
+                      ).toLocaleDateString("es-MX", {
+                        year: "numeric",
+                        month: "2-digit",
+                        day: "2-digit",
+                      })}
+                    </Badge>
+                  </TableCell>
+
+                  {/* Periodicidad */}
+                  <TableCell>
+                    <Badge variant="outline" className="text-[10px]">
+                      {item.periodicidad}
+                    </Badge>
+                  </TableCell>
+
+                  {/* Descripción Parada */}
                   <TableCell
-                    className="max-w-62.5 truncate text-xs font-medium"
+                    className="max-w-75 truncate"
                     title={item.desc_parada}
                   >
                     {item.desc_parada}
                   </TableCell>
+
+                  {/* Funciones */}
                   <TableCell>
                     <div className="flex gap-1">
                       <FunctionDot active={item.regula} label="Regula" />
@@ -220,11 +258,14 @@ export function ParadasRegularizacionTable() {
                       <FunctionDot active={item.relevante} label="Relevante" />
                     </div>
                   </TableCell>
-                  <TableCell className="text-right">
+
+                  {/* Acciones */}
+                  <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon">
-                          <MoreHorizontal />
+                        <Button variant="ghost" size="icon" className="h-8 w-8">
+                          <MoreHorizontal className="h-4 w-4" />
+                          <span className="sr-only">Abrir menú</span>
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
@@ -234,17 +275,19 @@ export function ParadasRegularizacionTable() {
                             setEditOpen(true);
                           }}
                         >
-                          <Pencil className="mr-2 h-4 w-4" /> Editar
+                          <Pencil className="mr-2 h-4 w-4" />
+                          Editar
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
-                          className="text-destructive"
                           onClick={() => {
                             setIdToDelete(item.id_parada_regularizacion);
                             setDeleteAlertOpen(true);
                           }}
+                          className="text-destructive focus:text-destructive"
                         >
-                          <Trash2 className="mr-2 h-4 w-4" /> Eliminar
+                          <Trash2 className="mr-2 h-4 w-4" />
+                          Eliminar
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -256,52 +299,85 @@ export function ParadasRegularizacionTable() {
         </Table>
       </div>
 
-      <div className="flex items-center justify-between px-2 py-4">
-        <div className="text-xs font-bold text-muted-foreground uppercase">
-          Mostrando {paginatedData.length} de{" "}
-          {filteredData.length.toLocaleString()} registros
+      {/* PAGINACIÓN */}
+      <div className="flex items-center justify-between text-sm">
+        <div className="text-muted-foreground">
+          {filteredData.length === 0
+            ? "0 of 0 row(s) selected."
+            : `Mostrando ${(currentPage - 1) * itemsPerPage + 1}-${Math.min(
+                currentPage * itemsPerPage,
+                filteredData.length,
+              )} de ${filteredData.length} registro(s)`}
         </div>
-        <div className="flex items-center space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setCurrentPage(1)}
-            disabled={currentPage === 1 || totalPages === 0}
+
+        <div className="flex items-center gap-2">
+          <span className="text-muted-foreground">Rows per page</span>
+          <Select
+            value={String(itemsPerPage)}
+            onValueChange={(value) => {
+              setItemsPerPage(Number(value));
+              setCurrentPage(1);
+            }}
           >
-            ««
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1 || totalPages === 0}
-          >
-            Anterior
-          </Button>
-          <div className="text-sm font-black px-2">
-            Página {currentPage} / {totalPages || 1}
+            <SelectTrigger className="w-17.5">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="10">10</SelectItem>
+              <SelectItem value="20">20</SelectItem>
+              <SelectItem value="50">50</SelectItem>
+              <SelectItem value="100">100</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <span className="text-muted-foreground">
+            Page {currentPage} of {totalPages || 1}
+          </span>
+
+          <div className="flex gap-1">
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-8 w-8"
+              onClick={() => setCurrentPage(1)}
+              disabled={currentPage === 1}
+            >
+              ««
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-8 w-8"
+              onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+              disabled={currentPage === 1}
+            >
+              ‹
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-8 w-8"
+              onClick={() =>
+                setCurrentPage(Math.min(totalPages, currentPage + 1))
+              }
+              disabled={currentPage === totalPages || totalPages === 0}
+            >
+              ›
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-8 w-8"
+              onClick={() => setCurrentPage(totalPages)}
+              disabled={currentPage === totalPages || totalPages === 0}
+            >
+              »»
+            </Button>
           </div>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() =>
-              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-            }
-            disabled={currentPage === totalPages || totalPages === 0}
-          >
-            Siguiente
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setCurrentPage(totalPages)}
-            disabled={currentPage === totalPages || totalPages === 0}
-          >
-            »»
-          </Button>
         </div>
       </div>
 
+      {/* Dialogs */}
       <EditParadasRegularizacionDialog
         parada={selectedParada}
         open={editOpen}
@@ -312,12 +388,16 @@ export function ParadasRegularizacionTable() {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>¿Eliminar registro?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta acción no se puede deshacer. La parada de regularización será
+              eliminada permanentemente.
+            </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancelar</AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmDelete}
-              className="bg-destructive text-destructive-foreground"
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
               Eliminar
             </AlertDialogAction>

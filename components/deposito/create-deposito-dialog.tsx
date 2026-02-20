@@ -101,7 +101,6 @@ export function CreateDepositoDialog({
                 }
                 className="col-span-3"
                 maxLength={500}
-                placeholder="DEPOSITO BAU MERIDA"
                 required
               />
             </div>
@@ -122,7 +121,6 @@ export function CreateDepositoDialog({
                 }
                 className="col-span-3"
                 maxLength={200}
-                placeholder="DEP BAU M"
                 required
               />
             </div>

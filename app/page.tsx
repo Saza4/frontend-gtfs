@@ -9,6 +9,8 @@ import {
   Network,
   GitBranch,
   Settings,
+  Download,
+  FileArchive,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,6 +19,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  ExportGtfsButton,
+  ExportGtfsCard,
+} from "@/components/gtfs-export/export-gtfs-button";
 
 export default function HomePage() {
   const modules = [
@@ -30,16 +36,16 @@ export default function HomePage() {
     },
     {
       icon: Route,
-      title: "Lí­neas",
-      description: "Administra las 192 lí­neas de transporte",
+      title: "Líneas",
+      description: "Administra las 192 líneas de transporte",
       href: "/lineas",
       color: "text-[#03603a]",
       bgColor: "bg-[#03603a]/10",
     },
     {
       icon: Warehouse,
-      title: "Depésito",
-      description: "10 depésitos y terminales",
+      title: "Depósito",
+      description: "10 depósitos y terminales",
       href: "/deposito",
       color: "text-[#273147]",
       bgColor: "bg-[#273147]/10",
@@ -62,8 +68,8 @@ export default function HomePage() {
     },
     {
       icon: GitBranch,
-      title: "Arcos Lí­nea",
-      description: "Geometrí­a de rutas",
+      title: "Arcos Línea",
+      description: "Geometría de rutas",
       href: "/arcos-linea",
       color: "text-[#273147]",
       bgColor: "bg-[#273147]/10",
@@ -110,7 +116,7 @@ export default function HomePage() {
 
               <p className="text-lg md:text-xl text-white/80 max-w-2xl">
                 Sistema integral de gestión de datos GTFS para el transporte
-                público de Mérida, Yucatán. Administra paradas, lí­neas, rutas y
+                público de Mérida, Yucatán. Administra paradas, líneas, rutas y
                 más.
               </p>
 
@@ -120,8 +126,12 @@ export default function HomePage() {
                   size="lg"
                   className="bg-white text-[#59af31] hover:bg-white/90"
                 >
-                  <Link href="/paradas">Comenzar â†’</Link>
+                  <Link href="/paradas">Comenzar →</Link>
                 </Button>
+
+                {/* Botón de exportación en el hero */}
+                <ExportGtfsButton variant="hero" size="lg" />
+
                 <Button
                   asChild
                   size="lg"
@@ -133,7 +143,7 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="relative h-[300px] w-[300px] md:h-[400px] md:w-[400px]">
+            <div className="relative h-300px w-300px md:h-400px md:w-400px">
               <Image
                 src="/Logo-oficial-ATY.svg"
                 alt="Logo Oficial ATY"
@@ -174,6 +184,49 @@ export default function HomePage() {
               </div>
               <div className="text-sm text-muted-foreground mt-1">
                 Puntos Carga
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ✅ NUEVA SECCIÓN: EXPORTACIÓN GTFS */}
+      <section className="container px-4 md:px-6 py-12 md:py-16">
+        <div className="grid md:grid-cols-2 gap-6 items-start">
+          {/* Card de exportación */}
+          <ExportGtfsCard />
+
+          {/* Info adicional */}
+          <div className="rounded-lg border bg-card p-6 shadow-sm">
+            <div className="space-y-4">
+              <div className="flex items-start gap-3">
+                <FileArchive className="h-5 w-5 text-[#03603a] mt-0.5 flex-shrink-0" />
+                <div>
+                  <h4 className="font-semibold mb-1">Formato Estándar</h4>
+                  <p className="text-sm text-muted-foreground">
+                    Compatible con Google Maps, Transit App, Moovit y otros
+                    planificadores de viaje
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <Download className="h-5 w-5 text-[#03603a] mt-0.5 flex-shrink-0" />
+                <div>
+                  <h4 className="font-semibold mb-1">Descarga Directa</h4>
+                  <p className="text-sm text-muted-foreground">
+                    El archivo google_transit.zip se genera automáticamente con
+                    todos los datos actualizados
+                  </p>
+                </div>
+              </div>
+
+              <div className="pt-2 border-t">
+                <p className="text-xs text-muted-foreground">
+                  El archivo incluye: agency.txt, stops.txt, routes.txt,
+                  trips.txt, stop_times.txt, calendar.txt, shapes.txt y
+                  feed_info.txt
+                </p>
               </div>
             </div>
           </div>
@@ -234,7 +287,7 @@ export default function HomePage() {
               </div>
               <h3 className="text-xl font-bold">Moderno</h3>
               <p className="text-muted-foreground">
-                Interfaz responsive con modo oscuro verdadero
+                Interfaz responsive con modo oscuro
               </p>
             </div>
 

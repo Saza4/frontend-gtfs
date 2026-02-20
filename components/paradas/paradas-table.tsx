@@ -259,7 +259,7 @@ export function ParadasTable() {
                 <TableHead className="w-25">ID</TableHead>
                 <TableHead>Descripción</TableHead>
                 <TableHead>Descripción Corta</TableHead>
-                <TableHead>Fecha Validez</TableHead>
+                <TableHead>Fecha de validez</TableHead>
                 <TableHead className="text-right">Latitud</TableHead>
                 <TableHead className="text-right">Longitud</TableHead>
                 <TableHead className="w-12.5"></TableHead>
