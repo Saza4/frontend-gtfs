@@ -32,6 +32,7 @@ export default function RootLayout({
     { href: "/datos-arco", label: "Datos Arco" },
     { href: "/arcos-linea", label: "Arcos Línea" },
     { href: "/paradas-regularizacion", label: "Regularización" },
+    { href: "/mapa-tiempo-real", label: "Mapa en Vivo" },
   ];
 
   return (

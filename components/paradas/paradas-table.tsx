@@ -62,7 +62,7 @@ export function ParadasTable() {
   const [editParada, setEditParada] = useState<Parada | null>(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
 
-  // ARREGLADO: Estado para Alert Dialog ahora guarda id + fecha
+  // Estado para Alert Dialog con clave compuesta (id + fecha)
   const [deleteParada, setDeleteParada] = useState<{
     id: number;
     fecha: string;
@@ -83,7 +83,9 @@ export function ParadasTable() {
       setLoading(true);
       const data = await paradasService.getAll();
       setParadas(data);
-      toast.success(`${data.length} paradas cargadas exitosamente`);
+      toast.success(
+        `${data.length.toLocaleString("es-MX")} paradas cargadas exitosamente`,
+      );
     } catch (error) {
       if (error instanceof ApiError) {
         toast.error(error.message);
@@ -97,14 +99,26 @@ export function ParadasTable() {
   };
 
   /**
+   * ✨ NUEVO: Extraer stop_id del sufijo _XXX (formato GTFS/ATY)
+   * Ejemplo: "R1 C-58 x 69 y 71 Col. Centro_1" → "1"
+   */
+  const extractStopId = (desc: string): string => {
+    const match = desc.match(/_(\d+)$/);
+    return match ? match[1] : "N/A";
+  };
+
+  /**
    * Filtrar paradas según búsqueda
    */
   const filteredParadas = paradas.filter((parada) => {
     const searchLower = searchQuery.toLowerCase();
+    const stopId = extractStopId(parada.desc_parada);
+
     return (
       parada.desc_parada.toLowerCase().includes(searchLower) ||
       parada.desc_parada_corta.toLowerCase().includes(searchLower) ||
-      parada.id_parada.toString().includes(searchQuery)
+      parada.id_parada.toString().includes(searchQuery) ||
+      stopId.includes(searchQuery) // ✨ NUEVO: Buscar por stop_id
     );
   });
 
@@ -126,7 +140,7 @@ export function ParadasTable() {
   };
 
   /**
-   * NUEVO: Callback cuando se actualiza una parada
+   * Callback cuando se actualiza una parada
    * NO recarga todo, solo actualiza el registro específico
    */
   const handleParadaUpdated = (paradaActualizada: Parada) => {
@@ -142,7 +156,7 @@ export function ParadasTable() {
   };
 
   /**
-   * NUEVO: Callback cuando se crea una parada
+   * Callback cuando se crea una parada
    * Agrega al estado local en lugar de recargar todo
    */
   const handleParadaCreated = (nuevaParada: Parada) => {
@@ -151,7 +165,7 @@ export function ParadasTable() {
   };
 
   /**
-   * ARREGLADO: Abrir Alert Dialog con id + fecha
+   * Abrir Alert Dialog con id + fecha
    */
   const handleDeleteClick = (id: number, fecha: string) => {
     setDeleteParada({ id, fecha });
@@ -159,17 +173,15 @@ export function ParadasTable() {
   };
 
   /**
-   * ARREGLADO: Confirmar eliminación con clave compuesta
+   * Confirmar eliminación con clave compuesta
    * NO recarga todo, solo elimina del estado local
    */
   const confirmDelete = async () => {
     if (!deleteParada) return;
 
     try {
-      // Envía id + fecha
       await paradasService.delete(deleteParada.id, deleteParada.fecha);
 
-      // Solo elimina del estado local (sin recarga)
       setParadas((prevParadas) =>
         prevParadas.filter(
           (p) =>
@@ -247,7 +259,7 @@ export function ParadasTable() {
             </Button>
           </div>
 
-          {/*  ARREGLADO: Botón Crear usa handleParadaCreated */}
+          {/* Botón Crear Parada */}
           <CreateParadaDialog onParadaCreated={handleParadaCreated} />
         </div>
 
@@ -280,21 +292,25 @@ export function ParadasTable() {
               ) : (
                 paginatedParadas.map((parada) => (
                   <TableRow key={`${parada.id_parada}-${parada.fecha_validez}`}>
+                    {/* ✅ FORMATO ATY: Badge sin "P-" */}
                     <TableCell className="font-medium">
-                      <Badge variant="outline">P-{parada.id_parada}</Badge>
+                      <Badge variant="outline">{parada.id_parada}</Badge>
                     </TableCell>
+
                     <TableCell
                       className="max-w-75 truncate"
                       title={parada.desc_parada}
                     >
                       {parada.desc_parada}
                     </TableCell>
+
                     <TableCell
                       className="max-w-50 truncate"
                       title={parada.desc_parada_corta}
                     >
                       {parada.desc_parada_corta}
                     </TableCell>
+
                     <TableCell>
                       <Badge variant="secondary">
                         {new Date(
@@ -306,12 +322,16 @@ export function ParadasTable() {
                         })}
                       </Badge>
                     </TableCell>
+
+                    {/* ✅ FORMATO ATY: 7 decimales de precisión */}
                     <TableCell className="text-right font-mono text-sm">
                       {Number(parada.latitud).toFixed(7)}°
                     </TableCell>
+
                     <TableCell className="text-right font-mono text-sm">
                       {Number(parada.longitud).toFixed(7)}°
                     </TableCell>
+
                     <TableCell>
                       {/* MENÚ DE 3 PUNTOS */}
                       <DropdownMenu>
@@ -367,7 +387,7 @@ export function ParadasTable() {
               : `Mostrando ${(currentPage - 1) * itemsPerPage + 1}-${Math.min(
                   currentPage * itemsPerPage,
                   filteredParadas.length,
-                )} de ${filteredParadas.length} registro(s)`}
+                )} de ${filteredParadas.length.toLocaleString("es-MX")} registro(s)`}
           </div>
 
           <div className="flex items-center gap-2">
@@ -438,7 +458,7 @@ export function ParadasTable() {
         </div>
       </div>
 
-      {/*  ARREGLADO: MODAL DE EDICIÓN usa handleParadaUpdated */}
+      {/* MODAL DE EDICIÓN */}
       <EditParadaDialog
         parada={editParada}
         open={editDialogOpen}

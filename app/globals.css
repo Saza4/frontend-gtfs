@@ -1,6 +1,9 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* Importar estilos de Leaflet */
+@import "leaflet/dist/leaflet.css";
+
 /* ============================================
    TEMA ATY - SISTEMA DE DISEÃ‘O OFICIAL
    Basado en Manual de Identidad ATY
@@ -125,4 +128,11 @@ body {
 
 .transition-aty {
   transition: all 0.2s ease-in-out;
+}
+
+/* Ajustar a lo que uno quiera */
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  z-index: 1; /* Evita que se encime a menús desplegables */
 }
